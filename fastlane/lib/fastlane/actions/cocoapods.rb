@@ -6,6 +6,8 @@ module Fastlane
         Actions.verify_gem!('cocoapods')
         cmd = []
 
+        cmd << 'RCT_NEW_ARCH_ENABLED=1' if params[:new_arch_enabled]
+
         unless params[:podfile].nil?
           if params[:podfile].end_with?('Podfile')
             podfile_folder = File.dirname(params[:podfile])
@@ -141,7 +143,14 @@ module Fastlane
                                        description: "(Option removed from cocoapods) Integrate the Pods libraries into the Xcode project(s)",
                                        deprecated: true,
                                        type: Boolean,
-                                       default_value: true)
+                                       default_value: true),
+          FastlaneCore::ConfigItem.new(
+                                      key: :new_arch_enabled,
+                                      env_name: "RCT_NEW_ARCH_ENABLED",
+                                      description: "Enable the new architecture for React Native",
+                                      type: Boolean,
+                                      default_value: false
+                                    )
         ]
         # Please don't add a version parameter to the `cocoapods` action. If you need to specify a version when running
         # `cocoapods`, please start using a Gemfile and lock the version there
